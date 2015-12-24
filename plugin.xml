@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-glympse"
+    version="0.0.1"
+    xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+	<license>Apache 2.0 License</license>
+    <engines>
+        <engine name="cordova-android" version="4.1.1" />
+    </engines>
+
+    <name>cordova-plugin-glympse</name>
+    <js-module name="cordova-plugin-glympse" src="www/cordova-plugin-glympse.js">
+        <clobbers target="glympse.plugin" />
+    </js-module>
+    <preference name="API_KEY" />
+    <preference name="SERVER_URL" />
+    <platform name="android">
+        <!-- <config-file target="config.xml" parent="/*"> </config-file> -->
+        <source-file src="src/android/Glympse.java"
+            target-dir="src/com/glympse/plugin" />
+
+        <config-file target="config.xml" parent="/*">
+            <feature name="cordova-plugin-glympse">
+                <param name="android-package" value="com.glympse.plugin.Glympse" />
+            </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <!-- http://developer.android.com/guide/topics/manifest/uses-sdk-element.html -->
+            <uses-sdk
+                android:minSdkVersion="8"
+                android:targetSdkVersion="19" />
+                android:maxSdkVersion="19" />
+            <!-- Required permissions -->
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+
+            <!-- Optional but highly recommended -->
+            <!-- uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/-->
+
+            <!-- Optional but highly recommended. Allows nickname / avatar to be imported from the device -->
+            <!-- uses-permission android:name="android.permission.READ_CONTACTS"/-->
+            <!-- uses-permission android:name="android.permission.READ_PROFILE"/-->
+
+            <!-- Optional but needed to send SMS messages through Glympse API -->
+            <!-- uses-permission android:name="android.permission.SEND_SMS"/-->
+
+            <!-- Optional but needed to write to the sms sent folder so that they show up in sms clients -->
+            <!-- uses-permission android:name="android.permission.WRITE_SMS"/-->
+
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <meta-data
+              android:name="com.glympse.plugin.API_KEY"
+              android:value="$API_KEY" />
+            <meta-data
+              android:name="com.glympse.plugin.SERVER_URL"
+              android:value="$SERVER_URL" />
+
+            <activity
+                android:name="com.glympse.android.kit.send.GlympseSendWizard"
+                android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize" >
+            </activity>
+            <service
+                android:name="com.glympse.android.hal.GlympseService"
+                android:enabled="true"
+                android:label="GlympseApiService"
+                android:exported="false" >
+            </service>
+
+        </config-file>
+        <framework src="lib/android/extras.gradle" custom="true" type="gradleReference" />
+        <resource-file src="lib/android/GlympseApiLite.jar" target="lib/GlympseApiLite.jar" />
+    </platform>
+
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="cordova-plugin-glympse">
+                <param name="ios-package" value="GlympsePlugin" />
+				<param name="onload" value="true" />
+            </feature>
+        </config-file>
+		<config-file target="*-Info.plist" parent="UIBackgroundModes">
+			<array>
+				<string>location</string>
+			</array>
+        </config-file>
+
+		<config-file target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
+			<string>Background location is required for sending Glympses.</string>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="Glympse API Key">
+            <string>$API_KEY</string>
+        </config-file>
+
+        <config-file target="*-Info.plist" parent="Glympse Server URL">
+            <string>$SERVER_URL</string>
+        </config-file>
+
+        <framework src="lib/ios/GlympseKitLite.framework" custom="true" />
+
+        <framework src="AddressBook.framework" />
+        <framework src="CFNetwork.framework" />
+        <framework src="CoreGraphics.framework" />
+        <framework src="CoreLocation.framework" />
+        <framework src="CoreMotion.framework" />
+
+        <framework src="EventKit.framework" />
+        <framework src="libz.dylib" />
+        <framework src="MapKit.framework" />
+        <framework src="MessageUI.framework" />
+
+        <framework src="SystemConfiguration.framework" />
+        <framework src="Security.framework" />
+        <framework src="QuartzCore.framework" />
+        <framework src="UIKit.framework" />
+
+        <resource-file src="lib/ios/GlympseResourcesLite.bundle" />
+        <source-file src="src/ios/GlympsePlugin.h" />
+        <source-file src="src/ios/GlympsePlugin.mm" />
+    </platform>
+</plugin>

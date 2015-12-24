@@ -1,0 +1,4 @@
+dependencies {
+    compile 'com.android.support:support-v4:21.+'
+    compile fileTree(dir: 'lib', include: ['Glympse*.jar'])
+}
